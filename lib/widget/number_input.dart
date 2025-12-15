@@ -10,7 +10,7 @@ class NumberInput extends StatefulWidget {
 }
 
 class _NumberInputState extends State<NumberInput> {
-  static final RegExp filter = RegExp("^[+-]?(?:\\d*(?:\\.\\d*)?|\\.\\d*)\$");
+  static final RegExp filter = RegExp(r"^[+-]?(?:\d*(?:\.\d*)?|\.\d*)\$");
 
   final _controller = TextEditingController();
 
@@ -28,20 +28,14 @@ class _NumberInputState extends State<NumberInput> {
                   : null,
 
       inputFormatters: [
-        FilteringTextInputFormatter.allow(RegExp(r"[0-9.+-]")),
+        FilteringTextInputFormatter.allow(RegExp(r"[0-9\.+-]")),
         TextInputFormatter.withFunction((oldValue, newValue) {
-          final text = newValue.text;
-          return text.isEmpty || RegExp(r"^[+-]?\.?").hasMatch(text)
-              ? newValue
-              : double.tryParse(text) == null
-              ? oldValue
-              : newValue;
+          return filter.hasMatch(newValue.text) ? newValue : oldValue;
         }),
       ],
       controller: _controller,
       onChanged:
           (value) => setState(() {
-            if (filter.hasMatch(value)) _controller.text = value;
             widget.onChanged(double.tryParse(value));
           }),
     );

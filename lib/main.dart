@@ -1,4 +1,5 @@
-import 'package:calculator_flutter/number_input.dart';
+import 'package:calculator_flutter/widget/calc_button.dart';
+import 'package:calculator_flutter/widget/number_input.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -15,7 +16,38 @@ class MainApp extends StatefulWidget {
 
 class _MainAppState extends State<MainApp> {
   double? numberField;
-  final controller = TextEditingController();
+  List<double> numbers = [];
+  List<Operation> operations = [];
+
+  void Function()? get add =>
+      numberField == null
+          ? null
+          : () {
+            numbers.add(numberField!);
+            operations.add(Operation.add);
+          };
+  void Function()? get subtract =>
+      numberField == null
+          ? null
+          : () {
+            numbers.add(numberField!);
+            operations.add(Operation.subtract);
+          };
+  void Function()? get multiply =>
+      numberField == null
+          ? null
+          : () {
+            numbers.add(numberField!);
+            operations.add(Operation.multiply);
+          };
+  void Function()? get divide =>
+      numberField == null
+          ? null
+          : () {
+            numbers.add(numberField!);
+            operations.add(Operation.divide);
+          };
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -27,39 +59,36 @@ class _MainAppState extends State<MainApp> {
               mainAxisAlignment: MainAxisAlignment.start,
               spacing: 20,
               children: [
-                NumberInput(onChanged: (val) => numberField),
+                NumberInput(
+                  onChanged: (val) => setState(() => numberField = val),
+                ),
                 Row(
                   spacing: 20,
                   children: [
-                    Expanded(
-                      flex: 1,
-                      child: FilledButton(
-                        onPressed: () {},
-                        child: FaIcon(FontAwesomeIcons.plus),
-                      ),
+                    CalcButton(
+                      icon: FaIcon(FontAwesomeIcons.plus),
+                      onPressed: add,
                     ),
-                    Expanded(
-                      flex: 1,
-                      child: FilledButton(
-                        onPressed: () {},
-                        child: FaIcon(FontAwesomeIcons.minus),
-                      ),
+                    CalcButton(
+                      icon: FaIcon(FontAwesomeIcons.minus),
+                      onPressed: subtract,
                     ),
-                    Expanded(
-                      flex: 1,
-                      child: FilledButton(
-                        onPressed: () {},
-                        child: FaIcon(FontAwesomeIcons.xmark),
-                      ),
+                    CalcButton(
+                      icon: FaIcon(FontAwesomeIcons.xmark),
+                      onPressed: divide,
                     ),
-                    Expanded(
-                      flex: 1,
-                      child: FilledButton(
-                        onPressed: () {},
-                        child: FaIcon(FontAwesomeIcons.divide),
-                      ),
+                    CalcButton(
+                      icon: FaIcon(FontAwesomeIcons.divide),
+                      onPressed: divide,
                     ),
                   ],
+                ),
+                DecoratedBox(
+                  decoration: BoxDecoration(
+                    border: Border.all(),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text.rich(TextSpan()),
                 ),
               ],
             ),
@@ -69,3 +98,5 @@ class _MainAppState extends State<MainApp> {
     );
   }
 }
+
+enum Operation { add, subtract, multiply, divide }
