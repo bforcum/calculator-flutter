@@ -1,22 +1,18 @@
+import 'package:calculator_flutter/util/util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class NumberInput extends StatefulWidget {
+class NumberInput extends StatelessWidget {
+  static final RegExp filter = RegExp(r"^[+-]?\d*\.?\d*$");
+
   final Function(double?) onChanged;
-  const NumberInput({super.key, required this.onChanged});
-
-  @override
-  State<NumberInput> createState() => _NumberInputState();
-}
-
-class _NumberInputState extends State<NumberInput> {
-  static final RegExp filter = RegExp(r"^[+-]?(?:\d*(?:\.\d*)?|\.\d*)\$");
-
-  final _controller = TextEditingController();
+  final double? init;
+  const NumberInput({super.key, this.init, required this.onChanged});
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      initialValue: doubleToString(init),
       keyboardType: TextInputType.numberWithOptions(
         signed: true,
         decimal: true,
@@ -28,16 +24,13 @@ class _NumberInputState extends State<NumberInput> {
                   : null,
 
       inputFormatters: [
-        FilteringTextInputFormatter.allow(RegExp(r"[0-9\.+-]")),
-        TextInputFormatter.withFunction((oldValue, newValue) {
-          return filter.hasMatch(newValue.text) ? newValue : oldValue;
-        }),
+        // FilteringTextInputFormatter.allow(RegExp(r"[0-9\.+-]")),
+        TextInputFormatter.withFunction(
+          (oldValue, newValue) =>
+              filter.hasMatch(newValue.text) ? newValue : oldValue,
+        ),
       ],
-      controller: _controller,
-      onChanged:
-          (value) => setState(() {
-            widget.onChanged(double.tryParse(value));
-          }),
+      onChanged: (value) => onChanged(double.tryParse(value)),
     );
   }
 }

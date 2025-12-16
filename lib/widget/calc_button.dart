@@ -7,21 +7,20 @@ class CalcButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      flex: 1,
-      child: AspectRatio(
-        aspectRatio: 1,
-        child: FilledButton(
-          style: ButtonStyle(
-            shape: WidgetStatePropertyAll(
-              RoundedRectangleBorder(
-                borderRadius: BorderRadiusGeometry.circular(16),
-              ),
+    return SizedBox(
+      width: 50,
+      height: 50,
+      child: FilledButton(
+        style: ButtonStyle(
+          padding: WidgetStatePropertyAll(EdgeInsets.zero),
+          shape: WidgetStatePropertyAll(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadiusGeometry.circular(16),
             ),
           ),
-          onPressed: onPressed,
-          child: icon,
         ),
+        onPressed: onPressed,
+        child: icon,
       ),
     );
   }
