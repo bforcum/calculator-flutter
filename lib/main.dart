@@ -39,6 +39,7 @@ class _MainAppState extends State<MainApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         body: SafeArea(
           child: Padding(
@@ -124,7 +125,7 @@ class _MainAppState extends State<MainApp> {
                         operations: operations,
                       ),
                       if (pastResults.isNotEmpty) Divider(),
-                      ...pastResults,
+                      ...pastResults.reversed,
                     ],
                   ),
                 ),
